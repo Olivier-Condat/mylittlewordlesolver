@@ -22,8 +22,29 @@ def load_file() -> List[str]:
     mainlist: List[str] = []
     with open('wordle_nyt_answers.txt') as file:
         mainlist = [line.strip('\n\r') for line in file]
-    
+
     return mainlist
+
+
+def count_occurence(words: List[str]) -> None:
+    """ count letter occurrence from the words list """
+
+    from collections import Counter
+
+    dicts: List = []
+
+    for word in words:
+        count = dict(Counter(word))
+        dicts.append(count)
+
+    result = {
+        k: [d.get(k) for d in dicts]
+        for k in set().union(*dicts)
+    }
+
+    for item in result:
+        temp = [i for i in result[item] if i is not None]
+        print(item, '->', sum(temp))
 
 
 def run_regexp(pattern: str, words: List[str]) -> List[str]:
@@ -78,6 +99,8 @@ def search_for_word() -> None:
             result = run_regexp(exp, words)
         elif whatwewant == "display":
             print(words)
+        elif whatwewant == 'count':
+            count_occurence(words)
         else:
             result = run_regexp(args[0], words)
 
