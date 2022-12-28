@@ -26,6 +26,38 @@ def load_file() -> List[str]:
     return mainlist
 
 
+def letter_at_index(letter: str,
+                    position: int,
+                    words: List[str]) -> List[str]:
+    """ qualify words with a letter at a specific index """
+    result: List[str] = []
+
+    for word in words:
+        found: bool = False
+        for it in re.finditer(letter, word):
+            found = (it.start() == position)
+        if found is True:
+            result.append(word)
+
+    return result
+
+
+def letter_not_at_index(letter: str,
+                        position: int,
+                        words: List[str]) -> List[str]:
+    """ disqualify words with a letter at a specific index """
+    result: List[str] = []
+
+    for word in words:
+        found: bool = False
+        for it in re.finditer(letter, word):
+            found = found or (it.start() == position)
+        if found is False:
+            result.append(word)
+
+    return result
+
+
 def count_occurence(words: List[str]) -> None:
     """ count letter occurrence from the words list """
 
@@ -101,6 +133,10 @@ def search_for_word() -> None:
             print(words)
         elif whatwewant == 'count':
             count_occurence(words)
+        elif whatwewant == 'not':
+            result = letter_not_at_index(str(args[1]), int(args[2]), words)
+        elif whatwewant == 'is':
+            result = letter_at_index(str(args[1]), int(args[2]), words)
         else:
             result = run_regexp(args[0], words)
 
